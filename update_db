@@ -4,3 +4,4 @@ alter table tblMataKuliah add column nama_dosen_pengampu varchar(100) default '-
 alter table tblMataKuliah add column mata_kuliah_id_master varchar(50) default '-' after konsentrasi;
 alter table tblMataKuliah add column kode_mata_kuliah_master varchar(20) default '-' after mata_kuliah_id_master;
 alter table tblJadwalKuliah add column st_daring varchar(1) default '0';
+alter table tblJadwalKuliahDetail add column st_main tinyint(1) default 0;

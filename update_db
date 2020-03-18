@@ -6,4 +6,5 @@ alter table tblMataKuliah add column kode_mata_kuliah_master varchar(20) default
 alter table tblJadwalKuliah add column st_daring varchar(1) default '0';
 alter table tblJadwalKuliahDetail add column st_main tinyint(1) default 0;
 alter table tblMahasiswa add column biaya_masuk_kuliah int(11) default 0;
+alter table tblMahasiswa add column biaya_smt int(11) default 0;
 

@@ -1,3 +1,4 @@
+alter table tblMataKuliah add column keterangan varchar(90) default '-';
 alter table tblMataKuliah add column sks_simulasi tinyint(4) default 0 after sks_praktek_lapangan;
 alter table tblMataKuliah add column id_dosen varchar(25) default '-' after konsentrasi_id;
 alter table tblMataKuliah add column nama_dosen_pengampu varchar(100) default '-' after id_dosen;

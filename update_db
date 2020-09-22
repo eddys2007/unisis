@@ -1,4 +1,6 @@
+ALTER TABle tblProgramStudi add column status varchar(245) default '-';
 alter table tblMataKuliah add column keterangan varchar(90) default '-';
+ALTER TABle tblMataKuliah add column konsentrasi_id varchar(50) default '-';
 alter table tblMataKuliah add column sks_simulasi tinyint(4) default 0 after sks_praktek_lapangan;
 alter table tblMataKuliah add column id_dosen varchar(25) default '-' after konsentrasi_id;
 alter table tblMataKuliah add column nama_dosen_pengampu varchar(100) default '-' after id_dosen;
@@ -6,6 +8,7 @@ alter table tblMataKuliah add column mata_kuliah_id_master varchar(50) default '
 alter table tblMataKuliah add column kode_mata_kuliah_master varchar(20) default '-' after mata_kuliah_id_master;
 alter table tblJadwalKuliah add column st_daring varchar(1) default '0';
 alter table tblJadwalKuliahDetail add column st_main tinyint(1) default 0;
+ALTER table tblJadwalKuliah add column koordinator_id varchar(45) default '-';
 alter table tblMahasiswa add column biaya_masuk_kuliah int(11) default 0;
 alter table tblMahasiswa add column biaya_smt int(11) default 0;
 ALTER TABLE tblMahasiswaBaru ADD COLUMN `id_jns_daftar` VARCHAR(1) NULL DEFAULT '1' AFTER `st_proses`;

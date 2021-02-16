@@ -1,0 +1,106 @@
+<html>
+<head>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<h1></h1>
+<input type="text" id="txtResult">
+<button type="button" id="btnLaunch" class="btn btn-primary">Launch Modal</button>
+
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <p>Enter text:</p>
+        <input type="text" id="txtInput">
+        <div id="demo">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnContent" class="btn btn-primary" onclick="loadDoc()">Reload</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="btnSave" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script>
+$(function() {
+  $('#btnLaunch').click(function() {
+    $('#myModal').modal('show');
+  });
+
+  $('#btnSave').click(function() {
+    var x = document.getElementById("txtInput").value; 
+    document.getElementById("txtResult").value = x;
+    $('#myModal').modal('hide');
+  });
+});
+
+
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("POST", "radio.html", true);
+  xhttp.send();
+}
+
+</script>
+
+<script type = "text/javascript">
+function myFunction(browser) {
+  this.document.getElementById("result").value = browser;
+  this.document.getElementById("txtInput").value = browser;
+}
+</script>
+</body>
+</html>
+
+------------------
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type = "text/javascript">
+function myFunction(browser) {
+  this.document.getElementById("result").value = browser;
+}
+</script>
+
+</head>
+<body>
+
+<p>Select your favorite browser:</p>
+<form action="/action_page.php">
+  <input type="radio" name="browser" onclick="myFunction(this.value)" value="Internet Explorer">Internet Explorer<br>
+  <input type="radio" name="browser" onclick="myFunction(this.value)" value="Firefox">Firefox<br>
+  <input type="radio" name="browser" onclick="myFunction(this.value)" value="Opera">Opera<br>
+  <input type="radio" name="browser" onclick="myFunction(this.value)" value="Google Chrome">Google Chrome<br>
+  <input type="radio" name="browser" onclick="myFunction(this.value)" value="Safari">Safari<br><br>
+
+  Your favorite browser is: <input type="text" id="result">
+  <input type="submit" value="Submit form">
+</form>
+
+</body>
+</html>

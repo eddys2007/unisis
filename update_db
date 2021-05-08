@@ -14,3 +14,4 @@ alter table tblMahasiswa add column biaya_smt int(11) default 0;
 ALTER TABLE tblMahasiswaBaru ADD COLUMN `id_jns_daftar` VARCHAR(1) NULL DEFAULT '1' AFTER `st_proses`;
 alter table tblJadwalKuliah add column inf_jumlah_nilai_masuk int(4) default 0;
 alter table tblMahasiswa add column last_krs varchar(5) default '26464';
+alter table tblMahasiswa add column jenis_pendanaan varchar(25) default 'MANDIRI';

@@ -16,3 +16,8 @@ alter table tblJadwalKuliah add column inf_jumlah_nilai_masuk int(4) default 0;
 alter table tblMahasiswa add column last_krs varchar(5) default '26464';
 alter table tblMahasiswa add column jenis_pendanaan varchar(25) default 'MANDIRI';
 alter table  tblNilai add column par_tot decimal(5,2) default 0 after jumlah_hadir;
+
+ALTER TABLE `tblTahunAkademik` 
+ADD COLUMN `tanggal_awal_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `fd_id_smt`,
+ADD COLUMN `tanggal_akhir_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `tanggal_awal_perkuliahan`,
+ADD COLUMN `jumlah_target_mahasiswa_baru` INT NULL DEFAULT 40 AFTER `tanggal_akhir_perkuliahan`;

@@ -21,3 +21,173 @@ ALTER TABLE `tblTahunAkademik`
 ADD COLUMN `tanggal_awal_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `fd_id_smt`,
 ADD COLUMN `tanggal_akhir_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `tanggal_awal_perkuliahan`,
 ADD COLUMN `jumlah_target_mahasiswa_baru` INT NULL DEFAULT 40 AFTER `tanggal_akhir_perkuliahan`;
+
+
+ALTER TABLE `tblTahunAkademik` 
+ADD COLUMN `tanggal_awal_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `fd_id_smt`,
+ADD COLUMN `tanggal_akhir_perkuliahan` DATE NULL DEFAULT '1900-01-01' AFTER `tanggal_awal_perkuliahan`,
+ADD COLUMN `jumlah_target_mahasiswa_baru` INT NULL DEFAULT 40 AFTER `tanggal_akhir_perkuliahan`;
+
+ALTER TABLE `tblProgramStudi` 
+ADD COLUMN `tahun_akademik` VARCHAR(45) NULL DEFAULT '-' AFTER `status`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `last_krs` VARCHAR(5) NULL DEFAULT '-' AFTER `biaya_smt`;
+
+ALTER TABLE `tblJadwalKuliahMahasiswa` 
+ADD COLUMN `fd_st` VARCHAR(45) NULL DEFAULT '-' AFTER `user_id`;
+
+ALTER TABLE `tblJadwalKuliah` 
+ADD COLUMN `id_aktivitas_mengajar` VARCHAR(45) NULL DEFAULT '-';
+
+ALTER TABLE `tblIndexPrestasi` 
+ADD COLUMN `fd_st` VARCHAR(5) NULL DEFAULT '-' ;
+
+ALTER TABLE `tblNilai` 
+ADD COLUMN `fd_st` VARCHAR(5) NULL DEFAULT '-' AFTER `fd_id_ekuivalensi`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `masa_pensiun` VARCHAR(45) NULL DEFAULT '-' AFTER `last_krs`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `lokasi_kegiatan` VARCHAR(45) NULL DEFAULT '-' AFTER `judul_skripsi`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `sk_tugas_skripsi` VARCHAR(45) NULL DEFAULT '-' AFTER `masa_pensiun`,
+ADD COLUMN `tgl_sk_tugas_skripsi` VARCHAR(10) NULL DEFAULT '-' AFTER `sk_tugas_skripsi`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `fd_id_aktivitas` VARCHAR(45) NULL DEFAULT '-' AFTER `tgl_sk_tugas_skripsi`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `fd_id_anggota` VARCHAR(45) NULL DEFAULT '-' AFTER `fd_id_aktivitas`;
+	
+ALTER TABLE `tblDosenPembimbing` 
+ADD COLUMN `fd_id` VARCHAR(45) NULL DEFAULT '-' ,
+ADD COLUMN `fd_id_bimbingan_mahasiswa` VARCHAR(45) NULL DEFAULT '-' AFTER `fd_id`,
+ADD COLUMN `fd_id_uji` VARCHAR(45) NULL DEFAULT '-' AFTER `fd_id_bimbingan_mahasiswa`;
+
+ALTER TABLE `tblMahasiswa` 
+ADD COLUMN `fd_st_lulus` VARCHAR(5) NULL DEFAULT '-' AFTER `fd_id_anggota`;
+
+
+USE `dbTEST`;
+CREATE 
+     OR REPLACE ALGORITHM = UNDEFINED 
+    DEFINER = `osis`@`%` 
+    SQL SECURITY DEFINER
+VIEW `vwJadwalKuliah` AS
+    SELECT 
+        `tblJadwalKuliah`.`jadwal_kuliah_id` AS `jadwal_kuliah_id`,
+        `tblJadwalKuliah`.`tahun_akademik` AS `tahun_akademik`,
+        `tblJadwalKuliah`.`prodi` AS `program_id`,
+        `tblJadwalKuliah`.`mata_kuliah_id` AS `mata_kuliah_id`,
+        `tblJadwalKuliah`.`nama_mata_kuliah` AS `nama_mata_kuliah`,
+        `tblJadwalKuliah`.`kelas_id` AS `kelas_id`,
+        `tblJadwalKuliah`.`ruang_id` AS `ruang_id`,
+        `tblJadwalKuliah`.`hari` AS `hari`,
+        `tblJadwalKuliah`.`jam_mulai` AS `jam_mulai`,
+        `tblJadwalKuliah`.`jam_selesai` AS `jam_selesai`,
+        `tblJadwalKuliah`.`dosen_id` AS `dosen_id`,
+        `tblJadwalKuliah`.`nama_dosen` AS `nama_dosen`,
+        `tblJadwalKuliah`.`inf_jumlah_terisi` AS `inf_jumlah_terisi`,
+        `tblJadwalKuliah`.`ruang_ujian` AS `ruang_ujian`,
+        `tblJadwalKuliah`.`tgl_ujian` AS `tgl_ujian`,
+        `tblJadwalKuliah`.`jam_mulai_ujian` AS `jam_mulai_ujian`,
+        `tblJadwalKuliah`.`jam_selesai_ujian` AS `jam_selesai_ujian`,
+        `tblJadwalKuliah`.`fd_id_kls` AS `fd_id_kls`,
+        IF(`tblJadwalKuliah`.`hari` = 0,
+            'SENIN',
+            IF(`tblJadwalKuliah`.`hari` = 1,
+                'SELASA',
+                IF(`tblJadwalKuliah`.`hari` = 2,
+                    'RABU',
+                    IF(`tblJadwalKuliah`.`hari` = 3,
+                        'KAMIS',
+                        IF(`tblJadwalKuliah`.`hari` = 4,
+                            'JUMAT',
+                            IF(`tblJadwalKuliah`.`hari` = 5,
+                                'SABTU',
+                                'MINGGU')))))) AS `nama_hari`
+    FROM
+        `tblJadwalKuliah`;
+
+USE `dbTEST`;
+CREATE 
+     OR REPLACE ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `vwJadwalKuliahMahasiswa` AS
+    SELECT 
+        `tblJadwalKuliahMahasiswa`.`jadwal_kuliah_mahasiswa_id` AS `jadwal_kuliah_mahasiswa_id`,
+        `tblJadwalKuliahMahasiswa`.`jadwal_kuliah_id` AS `jadwal_kuliah_id`,
+        `tblJadwalKuliah`.`tahun_akademik` AS `tahun_akademik`,
+        `tblJadwalKuliah`.`kelas_id` AS `kelas_id`,
+        `tblJadwalKuliah`.`ruang_id` AS `ruang_id`,
+        `tblJadwalKuliah`.`hari` AS `hari`,
+        `tblJadwalKuliah`.`jam_mulai` AS `jam_mulai`,
+        `tblJadwalKuliah`.`jam_selesai` AS `jam_selesai`,
+        `tblJadwalKuliah`.`jml_tm_renc` AS `jml_tm_renc`,
+        `tblJadwalKuliah`.`jml_tm_real` AS `jml_tm_real`,
+        `tblJadwalKuliah`.`nama_asisten` AS `nama_asisten`,
+        `tblJadwalKuliah`.`fd_id_kls` AS `fd_id_kls`,
+        `tblJadwalKuliah`.`fd_id_ajar` AS `fd_id_ajar`,
+        `tblJadwalKuliah`.`ruang_ujian` AS `ruang_ujian`,
+        `tblJadwalKuliah`.`tgl_ujian` AS `tgl_ujian`,
+        `tblJadwalKuliah`.`jam_mulai_ujian` AS `jam_mulai_ujian`,
+        `tblJadwalKuliah`.`jam_selesai_ujian` AS `jam_selesai_ujian`,
+        `tblJadwalKuliah`.`st_daring` AS `st_daring`,
+        `tblMataKuliah`.`mata_kuliah_id` AS `mata_kuliah_id`,
+        `tblMataKuliah`.`kode_mata_kuliah` AS `kode_mata_kuliah`,
+        `tblMataKuliah`.`nama_mata_kuliah` AS `nama_mata_kuliah`,
+        `tblMataKuliah`.`jumlah_sks` AS `jumlah_sks`,
+        `tblMataKuliah`.`program_id` AS `program_id`,
+        `tblMataKuliah`.`kurikulum` AS `kurikulum`,
+        `tblMataKuliah`.`semester` AS `semester`,
+        `tblMataKuliah`.`fd_id_mk` AS `fd_id_mk`,
+        `tblMataKuliah`.`st_mki` AS `st_mki`,
+        `tblMataKuliah`.`st_charge` AS `st_charge`,
+        `tblMataKuliah`.`sks_tatap_muka` AS `sks_tatap_muka`,
+        `tblMataKuliah`.`sks_praktikum` AS `sks_praktikum`,
+        `tblMataKuliah`.`sks_praktek_lapangan` AS `sks_praktek_lapangan`,
+        `tblMataKuliah`.`mata_kuliah_id_master` AS `mata_kuliah_id_master`,
+        `tblMataKuliah`.`kode_mata_kuliah_master` AS `kode_mata_kuliah_master`,
+        `tblJadwalKuliahMahasiswa`.`NPK` AS `NPK`,
+        `tblJadwalKuliahMahasiswa`.`fd_st` AS `fd_st`,
+        `tblMahasiswa`.`nama_lengkap` AS `nama_lengkap`,
+        `tblMahasiswa`.`angkatan` AS `angkatan`,
+        `tblMahasiswa`.`program_id` AS `mhs_program_id`,
+        `tblMahasiswa`.`jenis_kelas` AS `jenis_kelas`,
+        `tblMahasiswa`.`dosen_wali` AS `dosen_wali`,
+        `tblMahasiswa`.`dosen_wali_nama` AS `dosen_wali_nama`,
+        `tblMahasiswa`.`fd_id_pd` AS `fd_id_pd`,
+        `tblMahasiswa`.`fd_id_reg_pd` AS `fd_id_reg_pd`,
+        `tblKaryawan`.`karyawan_id` AS `karyawan_id`,
+        `tblKaryawan`.`nik` AS `nik`,
+        `tblKaryawan`.`gelar_awal` AS `gelar_awal`,
+        `tblKaryawan`.`nama_lengkap` AS `nama_dosen`,
+        `tblKaryawan`.`gelar_akhir` AS `gelar_akhir`,
+        IF(`tblJadwalKuliah`.`hari` = 0,
+            'SENIN',
+            IF(`tblJadwalKuliah`.`hari` = 1,
+                'SELASA',
+                IF(`tblJadwalKuliah`.`hari` = 2,
+                    'RABU',
+                    IF(`tblJadwalKuliah`.`hari` = 3,
+                        'KAMIS',
+                        IF(`tblJadwalKuliah`.`hari` = 4,
+                            'JUMAT',
+                            IF(`tblJadwalKuliah`.`hari` = 5,
+                                'SABTU',
+                                'MINGGU')))))) AS `nama_hari`
+    FROM
+        ((((`tblJadwalKuliah`
+        JOIN `tblJadwalKuliahMahasiswa`)
+        JOIN `tblMahasiswa`)
+        JOIN `tblMataKuliah`)
+        JOIN `tblKaryawan`)
+    WHERE
+        `tblJadwalKuliah`.`jadwal_kuliah_id` = `tblJadwalKuliahMahasiswa`.`jadwal_kuliah_id`
+            AND `tblMahasiswa`.`NPK` = `tblJadwalKuliahMahasiswa`.`NPK`
+            AND `tblMataKuliah`.`mata_kuliah_id` = `tblJadwalKuliah`.`mata_kuliah_id`
+            AND `tblKaryawan`.`karyawan_id` = `tblJadwalKuliah`.`dosen_id`;
